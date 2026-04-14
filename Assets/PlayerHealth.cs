@@ -11,10 +11,14 @@ public class PlayerHealth : MonoBehaviour
 
     public delegate void HealthChangeHandler(float newHealth, float amountChanged);
     public event HealthChangeHandler OnHealthChanged;
+
+    public delegate void HealthInitializedHandler(float newHealth);
+    public event HealthInitializedHandler OnHelthInitialized;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         health = maxHealth;
+        OnHelthInitialized?.Invoke(health);
     }
 
 
@@ -33,7 +37,7 @@ void Update()
             canReciveDemage = false;
             StartCoroutine(InvincibilityTimer(invincibilityTimer, ResetInvincibility));
         }
-        Debug.Log(health);
+        
     }
 
     IEnumerator InvincibilityTimer(float time, Action callback)
@@ -52,9 +56,11 @@ void Update()
     {
         health += healthToAdd;
         OnHealthChanged?.Invoke(health, healthToAdd);
-        Debug.Log(health);
+        
 
 
     }
-
+  
+  
+    
 }
