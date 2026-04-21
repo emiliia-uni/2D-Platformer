@@ -10,6 +10,9 @@ public class PlayerMotor : MonoBehaviour
     public float jumpForce = 5;
     public float maxSpeed = 10;
     public float stoppingForce = 10;
+
+    public CoinComponent cm;
+
     //stworzyæ now¹ zmienna o nazwie jumpForce;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
@@ -69,5 +72,18 @@ public class PlayerMotor : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         canJump = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Coin")) 
+        {
+            cm.coinCount++;
+            Destroy(collision.gameObject);
+            Debug.Log("Coin");
+
+
+        }
+
     }
 }
