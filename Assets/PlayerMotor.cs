@@ -82,7 +82,6 @@ public class PlayerMotor : MonoBehaviour
             Destroy(collision.gameObject);
             Debug.Log("Coin");
 
-
         }
 
     }
