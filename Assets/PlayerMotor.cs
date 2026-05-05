@@ -1,15 +1,18 @@
+using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerMotor : MonoBehaviour
 {
     Vector2 direction;
-    private bool canJump = true;
+    private bool _canJump = true;
     private Rigidbody2D rigidbody2D;
-    public float speed = 5;
-    public float jumpForce = 5;
+    public float speed;
+    public float jumpForce = 10;
     public float maxSpeed = 10;
     public float stoppingForce = 10;
+
+    
 
     public CoinComponent cm;
 
@@ -18,6 +21,8 @@ public class PlayerMotor : MonoBehaviour
     private void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
+
+       
     }
     // Update is called once per frame
     private void FixedUpdate()
@@ -57,13 +62,21 @@ public class PlayerMotor : MonoBehaviour
         direction = value.Get<Vector2>();
     }
 
+    private int _jumpCount = 0;
+    public int maxJumpCount = 2;
 
     private void OnJump()
     {
-        if (canJump)
+        if (_canJump)
         {
             rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-            canJump = false;
+            _jumpCount++;
+            if(_jumpCount >= maxJumpCount) 
+            {
+                _canJump = false;
+
+            }
+            
         }
 
         
@@ -71,7 +84,9 @@ public class PlayerMotor : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        canJump = true;
+        _canJump = true;
+        _jumpCount = 0;
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -85,4 +100,10 @@ public class PlayerMotor : MonoBehaviour
         }
 
     }
+
+    
+
+
+    
+
 }
