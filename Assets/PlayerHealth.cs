@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -36,6 +37,11 @@ void Update()
             OnHealthChanged?.Invoke(health,-damage);
             canReciveDemage = false;
             StartCoroutine(InvincibilityTimer(invincibilityTimer, ResetInvincibility));
+        }
+        if(health <= 0) 
+        {
+            SceneManager.LoadScene("Game Fall");
+        
         }
         
     }

@@ -15,6 +15,9 @@ public class PlayerMotor : MonoBehaviour
     public float maxSpeed = 10;
     public float stoppingForce = 10;
     private bool _isDashing = false;
+    private Animator _animator;
+
+    private float initXScale;
 
     
     public CoinComponent cm;
@@ -24,6 +27,8 @@ public class PlayerMotor : MonoBehaviour
     private void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
+        initXScale = transform.localScale.x;
 
        
     }
@@ -33,6 +38,46 @@ public class PlayerMotor : MonoBehaviour
         MovePlayer();
         HandleMaxSpeed();
         PlayerStopping();
+        if(direction.x != 0) 
+        {
+            _animator.SetBool("is moving", true);
+        
+        }
+        else 
+        {
+            _animator.SetBool("is moving", false);
+
+        }
+
+        if(direction.x > 0) 
+        {
+            transform.localScale = new Vector3(initXScale, transform.localScale. y, transform.localScale.z);
+        
+        }
+
+        else if (direction.x < 0)
+        {
+            transform.localScale = new Vector3(-initXScale, transform.localScale.y, transform.localScale.z);
+
+        }
+
+        if (rigidbody2D.linearVelocityY > 0)
+        {
+            _animator.SetBool("is falling", false);
+            _animator.SetBool("is jumping", true);
+        }
+        else if(rigidbody2D.linearVelocityY < 0)
+        {
+            _animator.SetBool("is falling", true);
+            _animator.SetBool("is jumping", false);
+        }
+        else
+        {
+            _animator.SetBool("is falling", false);
+            _animator.SetBool("is jumping", false);
+        }
+
+       
     }
 
     private void MovePlayer()
@@ -101,6 +146,17 @@ public class PlayerMotor : MonoBehaviour
         _isDashing = true;
         rigidbody2D.AddForce(new Vector2(direction.x * dashForce,0), ForceMode2D.Impulse);
         StartCoroutine(ResetDash(DashTime));
+
+        if (direction.x != 0)
+        {
+
+
+        }
+        else
+        {
+            _animator.SetBool("is jumping", false);
+
+        }
     }
     IEnumerator ResetDash(float timeToReset) 
     {
